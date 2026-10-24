@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ô chữ Tiễn dặn người yêu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3e9d2;--paper:#fbf5e6;--ink:#3b2a1c;--soft:#7a6247;--line:#c9b48a;--red:#9b2d20;--kw:#f3c9bf;--ok:#cfe0b8;--okink:#2f4a1a;--bad:#f1b9ad;--sel:#f4e2a8;--btn:#9b2d20;--btnink:#fbf5e6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1812;--paper:#2a2017;--ink:#f0e3c8;--soft:#b29d7c;--line:#5b4932;--red:#e08a78;--kw:#5e2b24;--ok:#3e5528;--okink:#dcecc4;--bad:#7a3a30;--sel:#4d3f1e;--btn:#c9604d;--btnink:#1f1812;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1f1812;--paper:#2a2017;--ink:#f0e3c8;--soft:#b29d7c;--line:#5b4932;--red:#e08a78;--kw:#5e2b24;--ok:#3e5528;--okink:#dcecc4;--bad:#7a3a30;--sel:#4d3f1e;--btn:#c9604d;--btnink:#1f1812;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Lora,Georgia,serif;line-height:1.6}
+.wrap{max-width:780px;margin:0 auto;padding:26px 14px 48px}
+header{text-align:center;margin-bottom:18px}
+.eyebrow{letter-spacing:.25em;font-size:12px;color:var(--red);text-transform:uppercase}
+h1{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,42px);margin:6px 0 4px;font-weight:700}
+.sub{font-style:italic;color:var(--soft);margin:0}
+.rule{width:90px;height:2px;background:var(--red);margin:14px auto 0;opacity:.7}
+.clue{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:10px 16px;margin-bottom:14px;min-height:78px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.clue small{display:block;color:var(--red);letter-spacing:.15em;text-transform:uppercase;font-size:11px}
+.clue p{margin:2px 0 0;font-size:17px}
+.boardbox{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px;overflow-x:auto}
+.grid{display:grid;grid-auto-rows:34px;gap:2px;width:max-content;margin:0 auto}
+.cell{position:relative;width:34px;height:34px}
+.cell input{width:100%;height:100%;border:1.5px solid var(--ink);border-radius:3px;text-align:center;font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);background:var(--paper);padding:0;text-transform:uppercase;caret-color:var(--red)}
+.cell.hl input{background:var(--sel)}
+.cell.kw input{border:2.5px solid var(--red);background:var(--kw)}
+.cell.kw.hl input{background:var(--sel)}
+.cell input:focus{outline:2px solid var(--red);outline-offset:1px;background:#fff3c4;color:#3b2a1c}
+.cell.done input{background:var(--ok);color:var(--okink);border-color:var(--okink)}
+.cell.kw.done input{border-color:var(--red);box-shadow:inset 0 0 0 2px var(--ok)}
+.cell.bad input{background:var(--bad)}
+.gap{width:100%;height:100%;cursor:pointer}
+.n{position:absolute;top:1px;left:3px;font-size:9px;font-weight:700;color:var(--red);pointer-events:none;line-height:1;z-index:1}
+.fills{margin-top:18px;text-align:center}
+.fills h2{font-family:'Playfair Display',serif;font-size:16px;margin:0 0 8px;color:var(--soft);font-weight:500}
+.fills div{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.fills button{border:0;background:var(--btn);color:var(--btnink);font-family:Lora,serif;font-size:13px;padding:8px 12px;border-radius:4px;cursor:pointer}
+.tools{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.tools button{font-family:Lora,serif;font-size:15px;padding:9px 18px;border-radius:4px;border:1.5px solid var(--red);background:transparent;color:var(--red);cursor:pointer}
+.tools button:hover{background:var(--red);color:var(--btnink)}
+.legend{text-align:center;color:var(--soft);font-size:13px;margin-top:14px;font-style:italic}
+.legend i{display:inline-block;width:12px;height:12px;border:2px solid var(--red);background:var(--kw);vertical-align:-2px;margin-right:4px;border-radius:2px}
+.msg{text-align:center;font-family:'Playfair Display',serif;color:var(--red);min-height:26px;margin-top:10px;font-size:18px}
+#reveal{display:none;margin:12px auto 0;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:12px 28px;border-radius:999px;border:0;background:var(--btn);color:var(--btnink);cursor:pointer;box-shadow:0 0 0 0 rgba(155,45,32,.6);animation:ping 1.8s infinite}
+#reveal.show{display:block}
+@keyframes ping{70%{box-shadow:0 0 0 14px rgba(155,45,32,0)}100%{box-shadow:0 0 0 0 rgba(155,45,32,0)}}
+
+/* màn hình đen + chữ sáng */
+#stage{position:fixed;inset:0;z-index:50;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;visibility:hidden;transition:opacity 1.2s ease,visibility 0s linear 1.2s}
+#stage.on{opacity:1;visibility:visible;transition:opacity 1.2s ease}
+#stage::before{content:"";position:absolute;width:min(120vw,900px);height:min(120vw,900px);border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,.38) 0%,rgba(255,190,80,.12) 40%,transparent 68%);opacity:0;transform:scale(.4)}
+#stage.on::before{animation:halo 3.2s ease-out 1.2s forwards,breathe 4s ease-in-out 4.4s infinite}
+@keyframes halo{to{opacity:1;transform:scale(1)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:.75}}
+.glow{position:relative;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(40px,11vw,110px);letter-spacing:.06em;color:#fff6d6;margin:0;text-align:center;white-space:nowrap}
+.glow span{display:inline-block;opacity:0;filter:blur(14px);transform:scale(1.4)}
+.glow .sp{width:.35em}
+#stage.on .glow span{animation:lit 1.4s ease-out forwards,pulse 3s ease-in-out infinite;animation-delay:calc(1.4s + var(--i)*.18s),calc(3.6s + var(--i)*.18s)}
+@keyframes lit{0%{opacity:0;filter:blur(14px);transform:scale(1.4);text-shadow:none}100%{opacity:1;filter:blur(0);transform:scale(1);text-shadow:0 0 12px #ffe9a8,0 0 30px #ffc85a,0 0 60px #ff9d2e,0 0 110px #ff7a1a}}
+@keyframes pulse{0%,100%{opacity:1;text-shadow:0 0 12px #ffe9a8,0 0 30px #ffc85a,0 0 60px #ff9d2e,0 0 110px #ff7a1a}50%{opacity:1;text-shadow:0 0 18px #fff3c8,0 0 44px #ffd270,0 0 90px #ffae3d,0 0 160px #ff8a24}}
+#close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;background:transparent;border:1px solid rgba(255,230,170,.4);color:rgba(255,236,190,.85);font-family:Lora,serif;font-size:14px;padding:7px 16px;border-radius:999px;cursor:pointer;opacity:0;transition:opacity .6s ease 5s}
+#stage.on #close{opacity:1}
+@media (prefers-reduced-motion:reduce){#reveal{animation:none}#stage.on::before,#stage.on .glow span{animation-duration:.01s;animation-delay:0s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="eyebrow">Truyện thơ dân tộc Thái</div>
+<h1>Tiễn dặn người yêu</h1>
+<p class="sub">Ô chữ từ khóa</p>
+<div class="rule"></div>
+</header>
+<div class="clue" id="clue"><small>Câu hỏi</small><p>Nhấn vào một ô chữ để đọc câu hỏi.</p></div>
+<div class="boardbox"><div class="grid" id="grid"></div></div>
+<div class="fills"><h2>Điền sẵn đáp án</h2><div id="fills"></div></div>
+<div class="tools"><button id="check">Kiểm tra</button><button id="reset">Làm lại</button></div>
+<div class="legend"><i></i>Các ô viền đỏ xếp thành cột dọc là từ khóa. Gõ không dấu; chỗ cách giữa các từ để trống.</div>
+<div class="msg" id="msg"></div>
+<button id="reveal">Mở từ khóa</button>
+</div>
+
+<div id="stage" aria-live="polite">
+<button id="close">Đóng</button>
+<h2 class="glow" id="glow" aria-label="KHÁT VỌNG"></h2>
+</div>
+
+<script>
+// a: đáp án (dấu cách = ô trống), k: vị trí ô từ khóa trong đáp án (chữ đỏ)
+const W=[
+{a:"DINH KIEN",k:5,q:"Lối suy nghĩ áp đặt, đánh giá người khác một cách phiến diện dựa trên sự ảnh hưởng từ tập tục xã hội hoặc tâm lý đám đông gọi là gì?"},
+{a:"THAI",k:1,q:"Tác phẩm gắn liền với nền văn học dân gian của dân tộc nào?"},
+{a:"1846 CAU",k:6,q:"Tác phẩm Tiễn dặn người yêu có tổng độ dài là: .?."},
+{a:"DUA TIEN",k:4,q:"Trong ngày đám cưới của cô gái, chàng trai đã tham dự với vai trò là người … . Hãy điền vào chỗ trống."},
+{a:"VAN VUONG",k:4,q:"“Vừa đi vừa ngoảnh lại / Vừa đi vừa ngoái trông” là hai trong số những câu thơ thể hiện nỗi niềm gì của hai nhân vật chính trong phút chia ly?"},
+{a:"SAT SON",k:5,q:"Tình yêu không đổi thay dù phải trải qua bao khó khăn, thử thách giữa hai nhân vật chính được gọi là tình yêu như thế nào?"},
+{a:"TRUYEN THO",k:5,q:"Tác phẩm “Lời tiễn dặn” thuộc thể loại gì?"},
+{a:"NGHEO KHO",k:1,q:"Vì sao chàng trai không được gia đình cô gái chấp nhận làm chồng, dù hai người yêu nhau tha thiết?"}
+];
+const KEYWORD="KHAT VONG"; // K H A T V O N G -> 8 ô đỏ từ trên xuống
+const KEYSHOW="KHÁT VỌNG";
+
+const KC=20; // cột của từ khóa (căn thẳng hàng)
+W.forEach((w,y)=>{w.y=y;w.x0=KC-w.k;w.n=y+1});
+const minX=Math.min(...W.map(w=>w.x0)),maxX=Math.max(...W.map(w=>w.x0+w.a.length-1));
+const cols=maxX-minX+1;
+W.forEach(w=>{w.x0-=minX;w.kx=KC-minX});
+
+const grid=document.getElementById('grid'),clue=document.getElementById('clue'),msg=document.getElementById('msg'),reveal=document.getElementById('reveal');
+grid.style.gridTemplateColumns='repeat('+cols+',34px)';
+const C={}; // "x,y" -> {x,y,ch,w,i,el,wrap,kw}
+let cur=0;
+for(let y=0;y<W.length;y++)for(let x=0;x<cols;x++){
+  const box=document.createElement('div');box.className='cell';
+  const w=W[y],i=x-w.x0;
+  if(i>=0&&i<w.a.length){
+    const ch=w.a[i],k=x+','+y,c={x,y,ch,w:y,i,el:null,wrap:box,kw:i===w.k};
+    C[k]=c;
+    if(ch===' '){
+      const g=document.createElement('div');g.className='gap';g.onclick=()=>pick(k);box.appendChild(g);
+    }else{
+      const inp=document.createElement('input');inp.autocomplete='off';inp.autocapitalize='off';inp.spellcheck=false;inp.maxLength=2;
+      c.el=inp;
+      inp.setAttribute('aria-label','Câu '+w.n+', ô '+(i+1));
+      inp.addEventListener('click',()=>pick(k));
+      inp.addEventListener('focus',()=>{if(cur!==y)select(y)});
+      inp.addEventListener('input',e=>{if(!e.isComposing)take(k)});
+      inp.addEventListener('compositionend',()=>take(k));
+      inp.addEventListener('keydown',e=>key(e,k));
+      box.appendChild(inp);
+      if(c.kw)box.classList.add('kw');
+    }
+    if(i===0){const n=document.createElement('span');n.className='n';n.textContent=w.n;box.appendChild(n)}
+  }else box.style.visibility='hidden';
+  grid.appendChild(box);
+}
+
+const norm=c=>c.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/gi,'d').toUpperCase();
+const cellsOf=wi=>W[wi].a.split('').map((_,i)=>C[(W[wi].x0+i)+','+wi]);
+
+function select(wi){
+  cur=wi;const w=W[wi];
+  Object.values(C).forEach(c=>c.wrap.classList.toggle('hl',c.w===wi));
+  const L=w.a.replace(/ /g,'').length;
+  clue.innerHTML='<small>Câu '+w.n+' · '+L+' ký tự</small><p></p>';
+  clue.querySelector('p').textContent=w.q;
+}
+function pick(k){const c=C[k];select(c.w);if(c.el)c.el.focus()}
+function move(k,d){
+  const c=C[k],cs=cellsOf(c.w);let i=c.i+d;
+  while(i>=0&&i<cs.length&&!cs[i].el)i+=d;
+  if(i>=0&&i<cs.length){cs[i].el.focus();return cs[i]}
+  return null;
+}
+function take(k){
+  const c=C[k];if(!c.el.value)return;
+  c.el.value=norm(c.el.value.slice(-1));c.wrap.classList.remove('bad');
+  move(k,1);evalAll();
+}
+function goRow(k,d){
+  const c=C[k],ny=c.w+d;if(ny<0||ny>=W.length)return;
+  const t=C[(c.x)+','+ny];
+  const target=(t&&t.el)?t:C[W[ny].kx+','+ny];
+  select(ny);target.el.focus();
+}
+function key(e,k){
+  const c=C[k];
+  if(e.key==='Backspace'&&!c.el.value){const p=move(k,-1);if(p){p.el.value='';p.wrap.classList.remove('bad')}evalAll();e.preventDefault()}
+  else if(e.key==='ArrowRight'){move(k,1);e.preventDefault()}
+  else if(e.key==='ArrowLeft'){move(k,-1);e.preventDefault()}
+  else if(e.key==='ArrowDown'){goRow(k,1);e.preventDefault()}
+  else if(e.key==='ArrowUp'){goRow(k,-1);e.preventDefault()}
+}
+function evalAll(){
+  Object.values(C).forEach(c=>c.wrap.classList.remove('done'));
+  let all=true;
+  W.forEach((w,wi)=>{
+    const cs=cellsOf(wi);
+    const ok=cs.every(c=>!c.el||norm(c.el.value||'')===c.ch);
+    if(ok)cs.forEach(c=>{if(c.el)c.wrap.classList.add('done')});else all=false;
+  });
+  // từ khóa: 8 ô đỏ đúng hết
+  const keyOK=W.every((w,wi)=>{const c=cellsOf(wi)[w.k];return norm(c.el.value||'')===c.ch});
+  reveal.classList.toggle('show',keyOK);
+  if(keyOK)msg.textContent=all?'Bạn đã hoàn thành ô chữ và tìm ra từ khóa!':'Bạn đã tìm ra từ khóa!';
+  else msg.textContent='';
+}
+function fill(wi){
+  cellsOf(wi).forEach(c=>{if(c.el){c.el.value=c.ch;c.wrap.classList.remove('bad')}});
+  select(wi);evalAll();
+}
+const fills=document.getElementById('fills');
+W.forEach((w,i)=>{const b=document.createElement('button');b.textContent='Câu '+w.n;b.onclick=()=>fill(i);fills.appendChild(b)});
+document.getElementById('check').onclick=()=>{
+  let wrong=0;
+  Object.values(C).forEach(c=>{if(!c.el)return;c.wrap.classList.remove('bad');
+    if(c.el.value&&norm(c.el.value)!==c.ch){c.wrap.classList.add('bad');wrong++}});
+  if(wrong)msg.textContent='Còn '+wrong+' ô chưa đúng.';else if(!msg.textContent)msg.textContent='Các ô đã điền đều đúng, tiếp tục nhé!';
+};
+document.getElementById('reset').onclick=()=>{
+  Object.values(C).forEach(c=>{if(c.el)c.el.value='';c.wrap.classList.remove('bad','done')});
+  msg.textContent='';reveal.classList.remove('show');closeStage();
+};
+
+// chữ KHÁT VỌNG
+const glow=document.getElementById('glow');
+[...KEYSHOW].forEach((ch,i)=>{const s=document.createElement('span');s.style.setProperty('--i',i);
+  if(ch===' '){s.className='sp';s.innerHTML='&nbsp;'}else s.textContent=ch;glow.appendChild(s)});
+const stage=document.getElementById('stage');
+function openStage(){stage.classList.add('on')}
+function closeStage(){stage.classList.remove('on')}
+reveal.onclick=openStage;
+document.getElementById('close').onclick=closeStage;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeStage()});
+
+select(0);
+</script>
+</body>
+</html>
